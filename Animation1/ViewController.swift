@@ -26,6 +26,7 @@ class ViewController: UIViewController {
         //属性动画
         self.propertyAnimation()
         //过度动画
+//        self.TransitionAnimation()
     }
     //可动画的属性 :frame,center,bounds alpha,background,tranform
     //修改属性做动画,属性修改的结果是真实的作用在动画的视图上,不能恢复到以前的样子;
@@ -83,7 +84,30 @@ class ViewController: UIViewController {
                 self.animationView.transform = CGAffineTransformScale(self.animationView.transform, 2, 2);
         }
     }
-    
+    //过度动画
+    func TransitionAnimation(){
+        /*
+        UIView.transitionWithView(self.view, duration: 1, options: UIViewAnimationOptions.TransitionNone, animations: { () -> Void in
+        self.view.transform = CGAffineTransformRotate(self.view.transform, CGFloat(M_PI))
+        }) { (finished: Bool) -> Void in
+        
+        }
+        */
+        
+        let toView = UIView(frame: CGRect(x: 100, y: 100, width: 100, height: 100))
+        toView.backgroundColor = UIColor.blueColor()
+        //该方法，只能执行一次
+        UIView.transitionFromView(self.animationView, toView: toView, duration: 1, options: UIViewAnimationOptions.TransitionNone) { (finished: Bool) -> Void in
+            
+        }
+        //方法调用完毕后，相当于执行了下面两句代码：
+        
+        // 添加toView到父视图
+        //self.animationView.superview?.addSubview(toView)
+        // 把fromView从父视图中移除
+        //self.animationView.removeFromSuperview()
+    }
+
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
