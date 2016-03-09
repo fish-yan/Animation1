@@ -23,7 +23,10 @@ class ViewController: UIViewController {
 
    
     @IBAction func animationAction(sender: AnyObject) {
+        //属性动画
         self.propertyAnimation()
+        //过度动画
+//        self.TransitionAnimation()
     }
     //可动画的属性 :frame,center,bounds alpha,background,tranform
     //修改属性做动画,属性修改的结果是真实的作用在动画的视图上,不能恢复到以前的样子;
@@ -45,20 +48,67 @@ class ViewController: UIViewController {
         /*
         //2、
         UIView.animateWithDuration(1, animations: { () -> Void in
+            //缩放
             self.animationView.transform = CGAffineTransformScale(self.animationView.transform, 0.5, 0.5)
             }) { (finished: Bool) -> Void in
-                //动画完成后操作
+                //动画完成后操作，回到最初状态
+                self.animationView.transform = CGAffineTransformIdentity
         }
         */
-        
-        //2、
+        /*
+        //3、
         UIView.animateWithDuration(1, delay: 1, options: UIViewAnimationOptions.AllowUserInteraction, animations: { () -> Void in
-            self.animationView.transform = CGAffineTransformTranslate(self.animationView.transform, 0.5, 5)
+            //每次都以中心点为参照进行位移
+            self.animationView.transform = CGAffineTransformTranslate(self.animationView.transform, 10, 50)
             }) { (finshed: Bool) -> Void in
                 
         }
+        */
         
+        //4.
+        //01.动画持续 的时长
+        //02.延迟时间
+        //03.动画弹回强度
+        //04.设置弹回速度
+        UIView.animateWithDuration(5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 20, options: UIViewAnimationOptions.TransitionNone, animations: { () -> Void in
+            var center = self.animationView.center
+            center.y += 50
+            self.animationView.center = center
+            self.animationView.backgroundColor = UIColor.blueColor()
+            self.animationView.transform = CGAffineTransformScale(self.animationView.transform, 0.5, 0.5);
+            }) { (finished: Bool) -> Void in
+                var center = self.animationView.center
+                center.y -= 50
+                self.animationView.center = center
+                self.animationView.backgroundColor = UIColor.redColor()
+                self.animationView.transform = CGAffineTransformScale(self.animationView.transform, 2, 2);
+        }
     }
+    //过度动画
+    func TransitionAnimation(){
+        /*
+        UIView.transitionWithView(self.view, duration: 1, options: UIViewAnimationOptions.TransitionNone, animations: { () -> Void in
+        self.view.transform = CGAffineTransformRotate(self.view.transform, CGFloat(M_PI))
+        }) { (finished: Bool) -> Void in
+        
+        }
+        */
+        
+        let toView = UIView(frame: CGRect(x: 100, y: 100, width: 100, height: 100))
+        toView.backgroundColor = UIColor.blueColor()
+        //该方法，只能执行一次
+        UIView.transitionFromView(self.animationView, toView: toView, duration: 1, options: UIViewAnimationOptions.TransitionNone) { (finished: Bool) -> Void in
+            
+        }
+        //方法调用完毕后，相当于执行了下面两句代码：
+        
+        // 添加toView到父视图
+        //self.animationView.superview?.addSubview(toView)
+        // 把fromView从父视图中移除
+        //self.animationView.removeFromSuperview()
+    }
+
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
